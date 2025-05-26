@@ -1,0 +1,33 @@
+app = "hsc-chemistry-grader"
+primary_region = "syd"
+
+[build]
+
+[env]
+  PORT = "8080"
+  DATABASE_URL = "/data/surrealdb"
+  STORAGE_PATH = "/data/storage"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ["app"]
+
+  [[http_service.checks]]
+    grace_period = "10s"
+    interval = "30s"
+    method = "GET"
+    timeout = "5s"
+    path = "/health"
+
+[mounts]
+  source = "hsc_chemistry_data"
+  destination = "/data"
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 2
+  memory_mb = 2048

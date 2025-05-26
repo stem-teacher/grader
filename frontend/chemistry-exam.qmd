@@ -1,0 +1,582 @@
+---
+title: "2023 HSC Chemistry Examination"
+format: 
+  html:
+    theme: default
+    css: assets/css/exam-styles.css
+    include-in-header: |
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script>
+        window.MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            packages: {'[+]': ['mhchem']}
+          },
+          loader: {load: ['[tex]/mhchem']}
+        };
+      </script>
+      <script src="https://cdn.jsdelivr.net/npm/jsme-editor@1.0.0/jsme/jsme.nocache.js"></script>
+server: shiny
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(shiny)
+library(jsonlite)
+library(htmltools)
+library(httr)
+
+# Configure learnr
+tutorial_options(
+  exercise.timelimit = 300,
+  exercise.checker = function(label, user_code, solution_code, check_code, envir_result, evaluate_result, ...) {
+    list(message = "Code recorded", correct = TRUE, type = "success", location = "append")
+  }
+)
+
+# Initialize session data
+if (!exists("submission_data")) {
+  submission_data <- reactiveValues(
+    submission_code = "",
+    responses = list(),
+    start_time = Sys.time()
+  )
+}
+```
+
+## Student Information
+
+```{r student-info}
+fluidRow(
+  column(6,
+    h3("Student Submission Code"),
+    textInput("submission_code", "Enter your submission code:", 
+              placeholder = "e.g., CHEM2023-001-ABC"),
+    verbatimTextOutput("code_status")
+  ),
+  column(6,
+    h3("Exam Instructions"),
+    tags$ul(
+      tags$li("Reading time: 5 minutes"),
+      tags$li("Working time: 3 hours"),
+      tags$li("Total marks: 100"),
+      tags$li("Use the chemical equation editor for formulas"),
+      tags$li("Submit when complete")
+    )
+  )
+)
+```
+
+```{r student-info-server}
+#| context: server
+
+output$code_status <- renderText({
+  if (nchar(input$submission_code) >= 10) {
+    submission_data$submission_code <- input$submission_code
+    "✓ Submission code accepted"
+  } else {
+    "Please enter a valid submission code"
+  }
+})
+```
+
+## Section I - Multiple Choice (20 marks)
+
+```{r section1-intro}
+tags$div(
+  class = "section-header",
+  h2("Section I - Multiple Choice"),
+  p("Attempt Questions 1-20. Allow about 35 minutes for this section.")
+)
+```
+
+### Question 1
+
+```{r q1}
+question("What is the safest method for disposing of a liquid hydrocarbon after an experiment?",
+  answer("Pour it down the sink"),
+  answer("Place it in a garbage bin"),
+  answer("Burn it by igniting with a match"),
+  answer("Place it in a separate waste container", correct = TRUE),
+  allow_retry = FALSE,
+  random_answer_order = FALSE
+)
+```
+
+### Question 2
+
+```{r q2}
+tags$div(
+  p("The technique illustrated is used to analyse chemical substances in a sample."),
+  p(em("(Diagram would be shown here in actual exam)")),
+  p("What is the technique shown?")
+)
+
+question("",
+  answer("Flame test"),
+  answer("Mass spectrometry"),
+  answer("Atomic absorption spectroscopy", correct = TRUE),
+  answer("Ultraviolet-visible spectrophotometry"),
+  allow_retry = FALSE
+)
+```
+
+### Question 3
+
+```{r q3}
+tags$div(
+  p("The structural formula of a compound is given: C-C≡C-C-C"),
+  p("What is the preferred IUPAC name of this compound?")
+)
+
+question("",
+  answer("Pent-2-ene"),
+  answer("Pent-2-yne", correct = TRUE),
+  answer("Pent-3-ene"),
+  answer("Pent-3-yne"),
+  allow_retry = FALSE
+)
+```
+
+### Question 4
+
+```{r q4}
+tags$div(
+  p("Sodium chloride dissolves in water according to: NaCl(s) ⇌ Na⁺(aq) + Cl⁻(aq)"),
+  p("A saturated solution contains [Na⁺] = 6.13 mol L⁻¹ and [Cl⁻] = 6.13 mol L⁻¹"),
+  p("What is the Ksp of sodium chloride?")
+)
+
+question("",
+  answer("2.65 × 10⁻²"),
+  answer("8.16 × 10⁻²"),
+  answer("12.26"),
+  answer("37.6", correct = TRUE),
+  allow_retry = FALSE
+)
+```
+
+### Question 5
+
+```{r q5}
+tags$div(
+  p("Which diagram represents the most concentrated weak acid?"),
+  p(em("(Diagrams would be shown here showing different concentrations of ionized vs non-ionized acid molecules)"))
+)
+
+question("",
+  answer("A"),
+  answer("B"),
+  answer("C"),
+  answer("D", correct = TRUE),
+  allow_retry = FALSE
+)
+```
+
+### Questions 6-20
+
+```{r questions-6-20}
+# Question 6
+question("The pH of a solution changes from 8 to 5. What happens to the concentration of hydrogen ions?",
+  answer("It increases by a factor of 3"),
+  answer("It decreases by a factor of 3"),
+  answer("It increases by a factor of 1000", correct = TRUE),
+  answer("It decreases by a factor of 1000"),
+  allow_retry = FALSE
+)
+
+# Question 7
+question("A mixture of 0.8 mol CO(g) and 0.8 mol H₂(g) was placed in a 1.0 L container. CO(g) + 2H₂(g) ⇌ CH₃OH(g). At equilibrium, 0.5 mol CO(g) remained. What amount of H₂(g) was present at equilibrium?",
+  answer("0.2 mol", correct = TRUE),
+  answer("0.4 mol"),
+  answer("0.6 mol"),
+  answer("1.0 mol"),
+  allow_retry = FALSE
+)
+
+# Question 8
+question("How many structural isomers have the molecular formula C₃H₆F₂?",
+  answer("2"),
+  answer("3"),
+  answer("4", correct = TRUE),
+  answer("5"),
+  allow_retry = FALSE
+)
+
+# Question 9
+question("A titration curve shows a strong acid being added to a weak base. Which combination does this represent?",
+  answer("Addition of a weak base to a weak acid"),
+  answer("Addition of a weak base to a strong acid"),
+  answer("Addition of a strong acid to a weak base", correct = TRUE),
+  answer("Addition of a strong acid to a strong base"),
+  allow_retry = FALSE
+)
+
+# Question 10
+question("Which correctly lists the compounds in order of increasing boiling point?",
+  answer("Heptane < heptan-2-one < heptan-1-ol < heptanoic acid", correct = TRUE),
+  answer("Heptane < heptan-1-ol < heptan-2-one < heptanoic acid"),
+  answer("Heptanoic acid < heptan-2-one < heptan-1-ol < heptane"),
+  answer("Heptanoic acid < heptan-1-ol < heptan-2-one < heptane"),
+  allow_retry = FALSE
+)
+
+# Questions 11-20 (abbreviated for space)
+# Add remaining questions...
+```
+
+## Section II - Extended Response (80 marks)
+
+```{r section2-intro}
+tags$div(
+  class = "section-header",
+  h2("Section II - Extended Response"),
+  p("Attempt Questions 21-37. Allow about 2 hours and 25 minutes for this section.")
+)
+```
+
+### Question 21 (2 marks)
+
+```{r q21}
+tags$div(
+  class = "question-header",
+  h4("Question 21 (2 marks)"),
+  p("Some isomers with the formula C₄H₈O₂ are shown:"),
+  tags$ul(
+    tags$li("butan-2-one: CH₃COCH₂CH₃"),
+    tags$li("butanal: CH₃CH₂CH₂CHO"), 
+    tags$li("2-methylpropanal: (CH₃)₂CHCHO")
+  ),
+  p("Name ONE pair of functional group isomers and ONE pair of chain isomers from the structures above.")
+)
+
+fluidRow(
+  column(6,
+    h5("Functional Group Isomers:"),
+    textInput("q21_functional_1", "First compound:", placeholder = "e.g., butan-2-one"),
+    textInput("q21_functional_2", "Second compound:", placeholder = "e.g., butanal")
+  ),
+  column(6,
+    h5("Chain Isomers:"),
+    textInput("q21_chain_1", "First compound:", placeholder = "e.g., butanal"),
+    textInput("q21_chain_2", "Second compound:", placeholder = "e.g., 2-methylpropanal")
+  )
+)
+```
+
+### Question 22 (4 marks)
+
+```{r q22}
+tags$div(
+  class = "question-header",
+  h4("Question 22 (4 marks)"),
+  p("Explain how the following substances would be classified under the Arrhenius and Brønsted-Lowry definitions of acids. Support your answer with relevant equations."),
+  tags$ul(
+    tags$li("HCl(aq)"),
+    tags$li("NH₄Cl(aq)")
+  )
+)
+
+# Chemical equation editor component
+tags$div(
+  h5("Your response (use chemical notation):"),
+  textAreaInput("q22_response", "", 
+                height = "300px", 
+                placeholder = "Enter your explanation with chemical equations. Use standard chemical notation (e.g., H+(aq), NH4+(aq))"),
+  tags$div(
+    class = "latex-preview",
+    h6("Preview:"),
+    htmlOutput("q22_preview")
+  )
+)
+```
+
+```{r q22-server}
+#| context: server
+
+output$q22_preview <- renderUI({
+  if (nchar(input$q22_response) > 0) {
+    # Simple preview without full LaTeX rendering for now
+    HTML(paste0("<div style='background: #f8f9fa; padding: 10px; border-radius: 4px;'>", 
+                gsub("\n", "<br>", input$q22_response), "</div>"))
+  } else {
+    HTML("<em>Enter your response to see preview</em>")
+  }
+})
+```
+
+### Question 23 (3 marks)
+
+```{r q23}
+tags$div(
+  class = "question-header",
+  h4("Question 23 (3 marks)"),
+  p("The pH of two solutions, X and Y, were measured before and after 10 drops of concentrated NaOH was added to each."),
+  tags$div(
+    style = "display: flex; justify-content: space-around; margin: 20px 0;",
+    tags$div(
+      style = "text-align: center; border: 1px solid #ddd; padding: 15px; border-radius: 8px;",
+      h5("Solution X"),
+      p("Initial pH = 7.00"),
+      p("Final pH = 12.00")
+    ),
+    tags$div(
+      style = "text-align: center; border: 1px solid #ddd; padding: 15px; border-radius: 8px;",
+      h5("Solution Y"),
+      p("Initial pH = 7.00"),
+      p("Final pH = 7.02")
+    )
+  ),
+  p("Explain the pH changes that occurred in solutions X and Y.")
+)
+
+textAreaInput("q23_response", "Your explanation:", 
+              height = "200px",
+              placeholder = "Explain the different pH changes observed in the two solutions...")
+```
+
+### Question 25(a) (3 marks)
+
+```{r q25a}
+tags$div(
+  class = "question-header",
+  h4("Question 25(a) (3 marks)"),
+  p("A student used apparatus to investigate the combustion of octan-1-ol."),
+  p("Results obtained:"),
+  tags$ul(
+    tags$li("Mass of water heated = 205 g"),
+    tags$li("Initial temperature of water = 23.7°C"),
+    tags$li("Final temperature of water = 60.4°C")
+  ),
+  p("Given data:"),
+  tags$ul(
+    tags$li("Molar enthalpy of combustion of octan-1-ol = −5294 kJ mol⁻¹"),
+    tags$li("Molar mass of octan-1-ol = 130.23 g mol⁻¹"),
+    tags$li("Specific heat capacity of water = 4.18 J K⁻¹ g⁻¹")
+  ),
+  p("Assuming no energy is lost to surroundings, calculate the mass of octan-1-ol burnt.")
+)
+
+textAreaInput("q25a_response", "Show all working and calculation steps:", 
+              height = "400px",
+              placeholder = "Show your step-by-step calculation including formulas used...")
+```
+
+## Chemical Structure Drawing
+
+```{r chemical-drawing}
+tags$div(
+  id = "chemical-drawing-section",
+  class = "chemical-tools",
+  h4("Chemical Structure Editor"),
+  p("Use the editor below to draw chemical structures when required:"),
+  tags$div(
+    id = "jsme-container", 
+    style = "width: 100%; height: 300px; border: 1px solid #ccc; margin: 10px 0;"
+  ),
+  fluidRow(
+    column(4, actionButton("insert_structure", "Insert into Current Answer", class = "btn-primary")),
+    column(4, actionButton("clear_structure", "Clear Structure", class = "btn-secondary")),
+    column(4, actionButton("get_smiles", "Get SMILES", class = "btn-info"))
+  ),
+  br(),
+  verbatimTextOutput("smiles_output")
+)
+```
+
+## Submit Exam
+
+```{r submit-section}
+tags$div(
+  class = "submit-section",
+  hr(),
+  h3("Submit Examination"),
+  p("Review your answers before submitting. Once submitted, you cannot make changes."),
+  br(),
+  fluidRow(
+    column(6,
+      checkboxInput("confirm_submit", "I confirm that I have completed the examination to the best of my ability", FALSE)
+    ),
+    column(6,
+      actionButton("submit_exam", "Submit Examination", 
+                   class = "btn-success btn-lg",
+                   style = "width: 100%;")
+    )
+  ),
+  br(),
+  uiOutput("submit_status")
+)
+```
+
+```{r submit-server}
+#| context: server
+
+observeEvent(input$submit_exam, {
+  if (!input$confirm_submit) {
+    showNotification("Please confirm completion before submitting", type = "warning")
+    return()
+  }
+  
+  if (nchar(submission_data$submission_code) < 10) {
+    showNotification("Please enter a valid submission code", type = "error")
+    return()
+  }
+  
+  # Show loading state
+  output$submit_status <- renderUI({
+    tags$div(
+      class = "alert alert-info",
+      h4("Submitting..."),
+      p("Please wait while your exam is being submitted and graded.")
+    )
+  })
+  
+  # Collect all responses
+  responses <- collect_all_responses()
+  
+  # Submit to backend
+  tryCatch({
+    submission_result <- submit_to_backend(submission_data$submission_code, responses)
+    
+    if (submission_result$success) {
+      output$submit_status <- renderUI({
+        tags$div(
+          class = "alert alert-success",
+          h4("Examination Submitted Successfully!"),
+          p("Your submission code: ", strong(submission_data$submission_code)),
+          p("Submission time: ", format(Sys.time(), "%Y-%m-%d %H:%M:%S")),
+          p("Your responses are being graded. Results will be available shortly."),
+          br(),
+          fluidRow(
+            column(6, actionButton("check_results", "Check Grading Status", class = "btn-primary")),
+            column(6, actionButton("download_pdf", "Download PDF (when ready)", class = "btn-secondary"))
+          )
+        )
+      })
+    } else {
+      output$submit_status <- renderUI({
+        tags$div(
+          class = "alert alert-danger",
+          h4("Submission Failed"),
+          p("Error: ", submission_result$error),
+          p("Please try again or contact support.")
+        )
+      })
+    }
+  }, error = function(e) {
+    output$submit_status <- renderUI({
+      tags$div(
+        class = "alert alert-danger",
+        h4("Submission Error"),
+        p("An error occurred while submitting: ", e$message),
+        p("Please check your internet connection and try again.")
+      )
+    })
+  })
+})
+
+collect_all_responses <- function() {
+  # Collect multiple choice answers
+  mc_answers <- list()
+  for (i in 1:20) {
+    mc_answers[[paste0("q", i)]] <- input[[paste0("q", i, "-answer")]]
+  }
+  
+  # Collect extended response answers
+  extended_answers <- list(
+    q21 = list(
+      functional_1 = input$q21_functional_1,
+      functional_2 = input$q21_functional_2,
+      chain_1 = input$q21_chain_1,
+      chain_2 = input$q21_chain_2
+    ),
+    q22 = input$q22_response,
+    q23 = input$q23_response,
+    q25a = input$q25a_response
+  )
+  
+  return(list(
+    multiple_choice = mc_answers,
+    extended_response = extended_answers,
+    submission_time = Sys.time(),
+    time_taken = as.numeric(difftime(Sys.time(), submission_data$start_time, units = "mins"))
+  ))
+}
+
+submit_to_backend <- function(submission_code, responses) {
+  # Get the backend URL from environment or use default
+  backend_url <- Sys.getenv("BACKEND_URL", "http://localhost:8080")
+  
+  result <- httr::POST(
+    url = paste0(backend_url, "/api/submissions"),
+    body = list(
+      submission_code = submission_code,
+      responses = responses
+    ),
+    encode = "json",
+    httr::add_headers("Content-Type" = "application/json")
+  )
+  
+  if (httr::status_code(result) == 200) {
+    return(list(success = TRUE, data = httr::content(result)))
+  } else {
+    return(list(success = FALSE, error = paste("Server returned status:", httr::status_code(result))))
+  }
+}
+```
+
+```{r results-checking}
+#| context: server
+
+observeEvent(input$check_results, {
+  if (nchar(submission_data$submission_code) < 10) {
+    showNotification("No valid submission code found", type = "error")
+    return()
+  }
+  
+  backend_url <- Sys.getenv("BACKEND_URL", "http://localhost:8080")
+  
+  tryCatch({
+    result <- httr::GET(
+      url = paste0(backend_url, "/api/grading/", submission_data$submission_code)
+    )
+    
+    if (httr::status_code(result) == 200) {
+      status_data <- httr::content(result)
+      
+      output$submit_status <- renderUI({
+        tags$div(
+          class = "alert alert-info",
+          h4("Grading Status"),
+          p("Status: ", strong(status_data$status)),
+          p("Message: ", status_data$message),
+          if (status_data$status == "Completed") {
+            tags$div(
+              br(),
+              actionButton("view_results", "View Results", class = "btn-success"),
+              actionButton("download_pdf", "Download PDF Report", class = "btn-primary")
+            )
+          } else {
+            tags$div(
+              br(),
+              actionButton("check_results", "Refresh Status", class = "btn-primary")
+            )
+          }
+        )
+      })
+    }
+  }, error = function(e) {
+    showNotification(paste("Error checking status:", e$message), type = "error")
+  })
+})
+```
+
+<script>
+// Initialize chemical structure editor when page loads
+document.addEventListener('DOMContentLoaded', function() {
+  // JSME integration would go here
+  console.log('Chemistry exam interface loaded');
+});
+</script>
