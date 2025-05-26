@@ -1,0 +1,18 @@
+{
+  "name": "hsc-chemistry-exam-frontend",
+  "version": "1.0.0",
+  "description": "HSC Chemistry Digital Examination Platform",
+  "scripts": {
+    "build": "quarto render",
+    "dev": "quarto preview chemistry-exam.qmd --port 3000",
+    "clean": "rm -rf _site"
+  },
+  "dependencies": {
+    "mathjs": "^11.11.0",
+    "mathjax": "^3.2.2",
+    "jsme-editor": "^1.0.0"
+  },
+  "devDependencies": {
+    "quarto-cli": "^1.4.0"
+  }
+}

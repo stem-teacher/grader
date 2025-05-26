@@ -1,0 +1,53 @@
+[package]
+name = "hsc-chemistry-backend"
+version = "0.1.0"
+edition = "2021"
+authors = ["STEM Teacher <teacher@example.com>"]
+description = "HSC Chemistry Digital Exam Backend API"
+license = "MIT"
+
+[dependencies]
+# Web framework
+axum = { version = "0.7", features = ["macros"] }
+tokio = { version = "1.0", features = ["full"] }
+tower = "0.4"
+tower-http = { version = "0.5", features = ["cors", "fs"] }
+
+# JSON handling
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Database
+surrealdb = { version = "1.0", features = ["kv-rocksdb"] }
+
+# HTTP clients for AI APIs
+reqwest = { version = "0.11", features = ["json"] }
+
+# File handling
+uuid = { version = "1.0", features = ["v4"] }
+chrono = { version = "0.4", features = ["serde"] }
+
+# Configuration
+config = "0.14"
+dotenvy = "0.15"
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# PDF generation
+printpdf = "0.6"
+
+# Error handling
+anyhow = "1.0"
+thiserror = "1.0"
+
+# Security
+argon2 = "0.5"
+
+[dev-dependencies]
+tokio-test = "0.4"
+
+[[bin]]
+name = "hsc-chemistry-backend"
+path = "src/main.rs"

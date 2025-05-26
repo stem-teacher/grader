@@ -1,0 +1,57 @@
+/* Exam-specific styling */
+.section-header {
+  background-color: #f8f9fa;
+  padding: 20px;
+  margin: 20px 0;
+  border-left: 5px solid #007bff;
+}
+
+.chemical-editor {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  min-height: 200px;
+  font-family: 'Courier New', monospace;
+}
+
+.latex-preview {
+  border: 1px solid #e9ecef;
+  border-radius: 4px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  margin-top: 10px;
+  min-height: 50px;
+}
+
+.submit-section {
+  background-color: #fff3cd;
+  padding: 30px;
+  border-radius: 8px;
+  margin-top: 40px;
+}
+
+.question-header {
+  background-color: #e9ecef;
+  padding: 10px 15px;
+  margin: 20px 0 10px 0;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+/* Chemical structure editor styling */
+#jsme-container {
+  background-color: white;
+  border-radius: 4px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .section-header {
+    padding: 15px;
+    margin: 15px 0;
+  }
+  
+  .submit-section {
+    padding: 20px;
+  }
+}

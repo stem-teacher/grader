@@ -1,0 +1,35 @@
+project:
+  type: website
+  output-dir: dist
+
+website:
+  title: "HSC Chemistry Examination"
+  
+format:
+  html:
+    theme: 
+      - default
+      - assets/css/exam-styles.css
+    toc: false
+    code-fold: false
+    embed-resources: false
+    include-in-header: |
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script>
+        window.MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            packages: {'[+]': ['mhchem']}
+          },
+          loader: {load: ['[tex]/mhchem']}
+        };
+      </script>
+      <script src="https://cdn.jsdelivr.net/npm/jsme-editor@1.0.0/jsme/jsme.nocache.js"></script>
+      <link rel="stylesheet" href="assets/css/exam-styles.css">
+    include-after-body: |
+      <script src="assets/js/exam-interface.js"></script>
+
+server:
+  type: shiny
